@@ -23,7 +23,7 @@ class UserController extends AbstractController
      * Valid Json : 
      * {
      *      "email": "bonnal.tristan91@gmail.com",
-     *       "password": "secret",
+     *      "password": "secret",
      *      "firstname": "Tristan",
      *      "lastname": "Bonnal",
      *      "foodtruckName": "DFritesX4"

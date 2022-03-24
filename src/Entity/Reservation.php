@@ -15,13 +15,20 @@ class Reservation
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['show_reservation'])]
     private $reference;
 
     #[ORM\Column(type: 'datetime')]
+    #[Groups(['show_reservation'])]
     private $bookedAt;
 
     #[ORM\Column(type: 'integer')]
+    #[Groups(['show_reservation'])]
     private $spot;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'reservation')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $user;
 
     public function getId(): ?int
     {
@@ -60,6 +67,18 @@ class Reservation
     public function setSpot(int $spot): self
     {
         $this->spot = $spot;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
