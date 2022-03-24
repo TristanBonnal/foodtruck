@@ -37,6 +37,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $lastname;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['show_reservation'])]
     private $foodtruckName;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Reservation::class)]

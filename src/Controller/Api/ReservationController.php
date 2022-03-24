@@ -54,49 +54,49 @@ class ReservationController extends AbstractController
     }
 
     /**
-     * Retourne les cagnottes liées à un utilisateur
+     * Returns reservations from the logged user
      * 
      * @return Response
      * 
-     * @Route("/api/Reservations", name="api_Reservations", methods = {"GET"})
+     * @Route("/api/reservations", name="api_reservations", methods = {"GET"})
      */
-    public function ReservationsByUser(): Response
+    public function reservationsByUser(): Response
     {
-        $Reservations = $this->getUser()->getReservations();
+        $reservations = $this->getUser()->getReservation();
 
         return $this->json(
-            $Reservations, 
+            $reservations, 
             Response::HTTP_OK,
             [],
-            ['groups' => ['show_Reservation']]
+            ['groups' => ['show_reservation']]
         );
     }
 
     /**
-     * Récupère une cagnotte tout en vérifiant l'utilisateur associé
+     * Returns a reservation found by id after checking the user requesting it
      * 
      * @return mixed
-     * @param Reservation $Reservation cagnotte correspondant au paramètre dynamique
+     * @param Reservation $reservation
      * 
-     * @Route("/api/Reservations/{id}", name="api_show_Reservation", methods = {"GET"})
+     * @Route("/api/reservations/{id}", name="api_show_reservation", methods = {"GET"})
      */
-    public function showReservation(Reservation $Reservation = null): Response
+    public function showReservation(Reservation $reservation = null): Response
     {
-        // Vérification de la cagnotte et de l'utilisateur
+        // Checking the reservation 
         try {
-            if (!$Reservation) {
-                throw new Exception("Cette cagnotte n'existe pas (identifiant erroné)", RESPONSE::HTTP_NOT_FOUND);
+            if (!$reservation) {
+                throw new Exception("Cette réservation n'existe pas (identifiant erroné)", RESPONSE::HTTP_NOT_FOUND);
             }
-            $this->denyAccessUnlessGranted('USER', $Reservation->getUser(), "Vous n'avez pas accès à cette cagnotte");
+            $this->denyAccessUnlessGranted('USER', $reservation->getUser(), "Vous n'avez pas accès à cette réservation");
         } catch (Exception $e) {
             return new JsonResponse($e->getMessage(), $e->getCode());
         }
 
         return $this->json(
-            $Reservation, 
+            $reservation, 
             Response::HTTP_OK,
             [],
-            ['groups' => ['show_Reservation']]
+            ['groups' => ['show_reservation']]
         );
     }
 

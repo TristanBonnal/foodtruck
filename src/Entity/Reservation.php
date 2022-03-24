@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\ReservationRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
 class Reservation
@@ -24,10 +26,15 @@ class Reservation
 
     #[ORM\Column(type: 'integer')]
     #[Groups(['show_reservation'])]
+    #[Assert\Range(
+        min: 1,
+        max: 7
+    )]
     private $spot;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'reservation')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['show_reservation'])]
     private $user;
 
     public function __construct ()
