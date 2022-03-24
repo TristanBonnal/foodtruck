@@ -30,6 +30,11 @@ class Reservation
     #[ORM\JoinColumn(nullable: false)]
     private $user;
 
+    public function __construct ()
+    {
+        $this->reference = (new \DateTime())->format('YmdH') . '-' . uniqid();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
