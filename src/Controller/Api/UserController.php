@@ -20,6 +20,14 @@ class UserController extends AbstractController
 
     /**
      * Allow user to signup
+     * Valid Json : 
+     * {
+     *      "email": "bonnal.tristan91@gmail.com",
+     *       "password": "secret",
+     *      "firstname": "Tristan",
+     *      "lastname": "Bonnal",
+     *      "foodtruckName": "DFritesX4"
+     *  }
      * 
      * @return Response
      *
@@ -58,7 +66,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * Retourne les utilisateurs
+     * Returns logged user infos
      *
      * @return Response
      *
