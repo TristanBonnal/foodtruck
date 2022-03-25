@@ -45,22 +45,51 @@ class ReservationRepository extends ServiceEntityRepository
         }
     }
 
-    // /**
-    //  * @return Reservation[] Returns an array of Reservation objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     */
+    
+    public function findReservationsByDateAndSpot(Reservation $reservation)
     {
         return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('r.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('r.bookedAt = :val')
+            ->andWhere('r.spot = :val2')
+            ->setParameter('val', $reservation->getBookedAt())
+            ->setParameter('val2', $reservation->getSpot())
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     */
+    
+    public function findReservationsByDate(Reservation $reservation)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.bookedAt = :val')
+            ->setParameter('val', $reservation->getBookedAt())
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @return Reservation[] Returns an array of Reservation objects
+     */
+    
+    public function findReservationsByUser(Reservation $reservation)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.user = :val')
+            ->setParameter('val', $reservation->getUser())
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    
 
     /*
     public function findOneBySomeField($value): ?Reservation

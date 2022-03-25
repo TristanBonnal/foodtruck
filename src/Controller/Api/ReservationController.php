@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use App\Entity\Reservation;
 use App\Models\JsonError;
+use App\Service\ValidateReservation;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -11,7 +12,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -19,19 +19,30 @@ class ReservationController extends AbstractController
 {
     /**
      * Add a reservation
+     * Json:
+     * {
+     *     "bookedAt": "2022-05-03",
+     *     "spot": 3
+     *  }
      * 
      * @return Response
      * 
      * @Route("/api/reservations", name="api_add_reservation", methods = {"POST"})
      */
-    public function addReservation(EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator): Response
+    public function addReservation(EntityManagerInterface $doctrine, Request $request, SerializerInterface $serializer, ValidatorInterface $validator, ValidateReservation $resaValidator): Response
     {
         // Deserialization from json
         $data = $request->getContent();
         try {
             $newReservation = $serializer->deserialize($data, Reservation::class, "json");
             $newReservation->setUser($this->getUser());
-        } catch (NotNormalizableValueException $e) {
+
+            // Check all conditions to validate the reservation (see Service)
+            $resaValidator->checkSpot($newReservation);
+            $resaValidator->checkByDay($newReservation);
+            $resaValidator->checkByUserAndByWeek($newReservation);
+
+        } catch (Exception $e) {
             return new JsonResponse($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
