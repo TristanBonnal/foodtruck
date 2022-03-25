@@ -25,19 +25,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $email;
 
     #[ORM\Column(type: 'json')]
+    #[Groups(['show_user'])]
     private $roles = [];
 
     #[ORM\Column(type: 'string')]
     private $password;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['show_user'])]
     private $firstname;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['show_user'])]
     private $lastname;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['show_reservation'])]
+    #[Groups(['show_reservation', 'show_user'])]
     private $foodtruckName;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Reservation::class)]
