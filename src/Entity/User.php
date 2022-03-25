@@ -22,6 +22,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     #[Groups(['show_user'])]
+    #[Assert\Email()]
     private $email;
 
     #[ORM\Column(type: 'json')]
@@ -29,18 +30,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $roles = [];
 
     #[ORM\Column(type: 'string')]
+    #[Assert\Length(
+        min: 8,
+        max: 50
+    )]
     private $password;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups(['show_user'])]
+    #[Assert\NotBlank]
     private $firstname;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups(['show_user'])]
+    #[Assert\NotBlank]
     private $lastname;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups(['show_reservation', 'show_user'])]
+    #[Assert\NotBlank]
     private $foodtruckName;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Reservation::class)]
