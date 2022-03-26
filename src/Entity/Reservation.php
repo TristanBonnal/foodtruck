@@ -34,7 +34,7 @@ class Reservation
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'reservation')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['show_reservation'])]
+    // #[Groups(['show_reservation'])]
     private $user;
 
     public function __construct ()
@@ -59,9 +59,9 @@ class Reservation
         return $this;
     }
 
-    public function getBookedAt(): ?\DateTimeInterface
+    public function getBookedAt(): ?string
     {
-        return $this->bookedAt;
+        return $this->bookedAt->format('d/m/Y');
     }
 
     public function setBookedAt(\DateTimeInterface $bookedAt): self
