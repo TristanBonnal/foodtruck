@@ -59,9 +59,9 @@ class Reservation
         return $this;
     }
 
-    public function getBookedAt(): ?string
+    public function getBookedAt(): ?\DateTimeInterface
     {
-        return $this->bookedAt->format('d/m/Y');
+        return $this->bookedAt;
     }
 
     public function setBookedAt(\DateTimeInterface $bookedAt): self
