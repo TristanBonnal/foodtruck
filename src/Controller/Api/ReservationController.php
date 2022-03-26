@@ -35,6 +35,10 @@ class ReservationController extends AbstractController
         $data = $request->getContent();
         try {
             $newReservation = $serializer->deserialize($data, Reservation::class, "json");
+        } catch (Exception $e) {
+            return new JsonResponse('Veuillez compléter tous les champs', Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        try {
             $newReservation->setUser($this->getUser());
 
             // Check all conditions to validate the reservation (see Service)
