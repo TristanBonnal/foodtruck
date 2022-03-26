@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
+
 class Reservation
 {
     #[ORM\Id]
@@ -22,6 +23,7 @@ class Reservation
 
     #[ORM\Column(type: 'datetime')]
     #[Groups(['show_reservation'])]
+    
     private $bookedAt;
 
     #[ORM\Column(type: 'integer')]
@@ -34,7 +36,7 @@ class Reservation
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'reservation')]
     #[ORM\JoinColumn(nullable: false)]
-    // #[Groups(['show_reservation'])]
+    #[Groups(['show_reservation'])]
     private $user;
 
     public function __construct ()

@@ -52,6 +52,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $foodtruckName;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Reservation::class)]
+    #[ORM\OrderBy(["bookedAt" => "ASC"])]
     private $reservation;
 
     public function __construct()
