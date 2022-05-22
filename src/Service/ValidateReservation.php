@@ -14,7 +14,7 @@ class ValidateReservation
     }
 
     /**
-     * Check if the actual reservation spot is free for the requested booking date
+     * Check if the actual reservation spot is free for the requested booking date (1 reservation/spot/day)
      *
      * @param Reservation $reservation
      * @return void
@@ -28,7 +28,7 @@ class ValidateReservation
     }
 
     /**
-     * Check the number of reservations by day and that bookedAt >= +1 day
+     * Check the number of reservations, maximum reservations by day is 7, 6 on fridays, and a reservation must be made on tomorrow at least
      *
      * @param Reservation $reservation
      * @return void
@@ -36,7 +36,10 @@ class ValidateReservation
     public function checkByDay(Reservation $reservation)
     {
         $reservationsByDate = $this->reservationRepository->findReservationsByDate($reservation);
+
+        // Checking if it's friday
         $dayOfTheWeek = $reservation->getBookedAt()->format('l');
+
         $minDate = (new \DateTime('tomorrow'));
         
         // Numbers of reservations limits
@@ -44,7 +47,7 @@ class ValidateReservation
             throw new Exception("Limite du nombre de réservations atteinte à cette date", Response::HTTP_BAD_REQUEST); 
         }
 
-        // Soonest date possible
+        // Reservation tomorrow the soonest
         if ($reservation->getBookedAt() < $minDate) {
             throw new Exception("Vous pouvez réserver un emplacement demain au plus tot", Response::HTTP_BAD_REQUEST); 
         }
@@ -58,6 +61,7 @@ class ValidateReservation
      */
     public function checkByUserAndByWeek(Reservation $reservation)
     {
+        // If one of the reservations already made by user is on the same week he's requesting, then throw an error
         $reservationsByUser = $this->reservationRepository->findReservationsByUser($reservation);
         $requestedWeek = $reservation->getBookedAt()->format('W');
         $requestedYear = $reservation->getBookedAt()->format('Y');
